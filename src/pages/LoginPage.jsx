@@ -1,18 +1,21 @@
-/* eslint-disable react/react-in-jsx-scope */
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 
-import Home from '../pages/Home'
+import Home from '@/pages/Home'
+import api from '@/shared/services/api'
 
 const LoginPage = () => {
+  const navigate = useNavigate()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault()
 
-    console.log('submit', { email, password })
+    api.post('/auth/login', { email, password }).then((res) => {
+      navigate('/cadastrar')
+    })
   }
 
   return (

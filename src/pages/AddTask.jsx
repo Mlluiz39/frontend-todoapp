@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import HomeTask from '../pages/HomeTask'
+import HomeTask from '@/pages/HomeTask'
 
 const AddTask = () => {
   const [title, setTitle] = useState({

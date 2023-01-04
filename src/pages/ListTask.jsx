@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
-import HomeTask from '../pages/HomeTask'
+import HomeTask from '@/pages/HomeTask'
 
 const ListTask = () => {
   const [tasks, setTasks] = useState([{ id: '', title: '', description: '' }])

@@ -1,7 +1,7 @@
 import React from 'react'
 
-import Startup from '../assets/startup.png'
-import Home from '../pages/Home'
+import Startup from '@/assets/startup.png'
+import Home from '@/pages/Home'
 
 function About() {
   return (

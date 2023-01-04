@@ -1,30 +1,32 @@
-import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+/* eslint-disable react/react-in-jsx-scope */
+import { useForm } from 'react-hook-form'
+import { Link } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify'
 
-import 'react-toastify/dist/ReactToastify.css'
-import Home from '../pages/Home'
+import Home from '@/pages/Home'
+import api from '@/shared/services/api'
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as yup from 'yup'
 
 const RegisterUser = () => {
-  const [user, setUser] = useState('')
-  const navigate = useNavigate()
+  const schema = yup.object().shape({
+    name: yup.string().required('O nome é obrigatório!'),
+    email: yup.string().email('Digite um email valido!').required('O email é obrigatório!'),
+    password: yup.string().required('A senha é obrigatória').min(6, 'A senha deve ter no mínimo 6 caracteres!')
+  })
 
-  function handleChange(event) {
-    setUser({ ...user, [event.target.name]: event.target.value })
-  }
+  const { register, handleSubmit, formState: { errors } } = useForm(
+    { resolver: yupResolver(schema) }
+  )
 
-  const handleSubmit = async e => {
-    e.preventDefault()
-
-    try {
-      await createUser(user.name, user.email, user.password)
-      toast.success('Usuário criado com sucesso!')
-      navigate('/login')
-    } catch (error) {
-      if (user === '') {
-        toast.error('Preencha todos os campos!')
-      }
+  const onSubmit = async (clientData) => {
+    await api.post('/register', clientData).then((res) => {
+      toast.success('Usuário cadastrado com sucesso!')
+    }).catch((err) => {
+      console.log(err)
+      toast.error('Erro verifique se o email já está cadastrado!')
     }
+    )
   }
 
   return (
@@ -42,41 +44,45 @@ const RegisterUser = () => {
               >
                 Cadastrar
               </label>
-              <form className="mt-10">
+              <form className="mt-10" noValidate onSubmit={handleSubmit(onSubmit)}>
                 <div>
                   <input
                     type="text"
                     placeholder="Nome"
-                    className="mt-1 block w-full border-none bg-gray-100 h-11 rounded-xl shadow-lg hover:bg-blue-100 focus:bg-blue-100 focus:ring-0 placeholder:pl-[14px] outline-none"
+                    className="px-3 mt-1 block w-full border-none bg-gray-100 h-11 rounded-xl shadow-lg hover:bg-blue-100 focus:bg-blue-100 focus:ring-0  outline-none"
+
+                    {...register('name', { required: true })}
+
                   />
+                  <p className='text-red-700 mx-1 mt-1'>{errors.name?.message}</p>
                 </div>
 
                 <div className="mt-7">
                   <input
                     type="email"
                     placeholder="Email"
-                    className="mt-1 block w-full border-none bg-gray-100 h-11 rounded-xl shadow-lg hover:bg-blue-100 focus:bg-blue-100 focus:ring-0 placeholder:pl-[14px] outline-none"
+                    className=" px-3 mt-1 block w-full border-none bg-gray-100 h-11 rounded-xl shadow-lg hover:bg-blue-100 focus:bg-blue-100 focus:ring-0 outline-none"
+
+                    {...register('email', { required: true })}
                   />
+                  <p className='text-red-700 mx-1 mt-1'>{errors.email?.message}</p>
                 </div>
 
                 <div className="mt-7">
                   <input
                     type="password"
                     placeholder="Senha"
-                    className="mt-1 block w-full border-none bg-gray-100 h-11 rounded-xl shadow-lg hover:bg-blue-100 focus:bg-blue-100 focus:ring-0 placeholder:pl-[14px] outline-none"
+                    className=" px-3 mt-1 block w-full border-none bg-gray-100 h-11 rounded-xl shadow-lg hover:bg-blue-100 focus:bg-blue-100 focus:ring-0 outline-none"
+
+                    {...register('password', { required: true })}
                   />
+                  <p className='text-red-700 mx-1 mt-1'>{errors.password?.message}</p>
                 </div>
 
                 <div className="mt-7">
-                  <input
-                    type="password"
-                    placeholder="Confirmar Senha"
-                    className="mt-1 block w-full border-none bg-gray-100 h-11 rounded-xl shadow-lg hover:bg-blue-100 focus:bg-blue-100 focus:ring-0 placeholder:pl-[14px] outline-none"
-                  />
-                </div>
-
-                <div className="mt-7">
-                  <button className="bg-blue-500 w-full py-3 rounded-xl text-white shadow-xl hover:shadow-inner focus:outline-none transition duration-500 ease-in-out  transform hover:-translate-x hover:scale-105">
+                  <button
+                   type='submit'
+                   className="bg-blue-500 w-full py-3 rounded-xl text-white shadow-xl hover:shadow-inner focus:outline-none transition duration-500 ease-in-out  transform hover:-translate-x hover:scale-105">
                     Registrar
                   </button>
                 </div>
