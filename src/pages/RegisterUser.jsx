@@ -19,15 +19,21 @@ const RegisterUser = () => {
     { resolver: yupResolver(schema) }
   )
 
-  const onSubmit = async (clientData) => {
-    await api.post('/register', clientData).then((res) => {
-      toast.success('Usuário cadastrado com sucesso!')
-    }).catch((err) => {
-      console.log(err)
-      toast.error('Erro verifique se o email já está cadastrado!')
+  const onSubmit = async clientData => {
+
+      toast.promise(
+        await api.post('/register', clientData),
+        {
+          pending
+            : 'Cadastrando...',
+          success
+            : 'Cadastrado com sucesso!',
+          error
+            : 'Erro verifique se o email já está cadastrado!'
+        },
+      )
     }
-    )
-  }
+  
 
   return (
     <>
