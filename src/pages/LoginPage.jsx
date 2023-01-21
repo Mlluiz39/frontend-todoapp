@@ -1,27 +1,55 @@
-import React, { useState } from 'react'
+import React from 'react'
+import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
-import { ToastContainer } from 'react-toastify'
+import { ToastContainer, toast } from 'react-toastify'
 
-import Home from '@/pages/Home'
-import api from '@/shared/services/api'
+import useUser from '@/hooks/useUser'
+import HomeLogin from '@/pages/HomeLogin'
+import { api } from '@/shared/services/api'
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as yup from 'yup'
 
 const LoginPage = () => {
+  const { login } = useUser()
   const navigate = useNavigate()
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
+  const schema = yup.object().shape({
+    email: yup.string().email('Digite um email valido!').required('O email é obrigatório!'),
+    password: yup.string().required('A senha é obrigatória').min(6, 'A senha deve ter no mínimo 6 caracteres!')
+  })
 
-    api.post('/auth/login', { email, password }).then((res) => {
-      navigate('/cadastrar')
-    })
+  const { register, handleSubmit, formState: { errors } } = useForm(
+    { resolver: yupResolver(schema) }
+  )
+
+  const handleLogin = async clientData => {
+    try {
+      const { status, data } = await api.post('/sessions', {
+        email: clientData.email,
+        password: clientData.password
+      }, { validateStatus: () => true }
+      )
+      if (status === 200 || status === 201) {
+        login(data)
+        toast.success('Login realizado com sucesso!')
+
+        setTimeout(() => {
+          navigate('/cadastrar')
+        }, 2000)
+      } else if (status === 401) {
+        toast.error('Email ou senha incorretos!')
+      } else {
+        throw new Error()
+      }
+    } catch (error) {
+      toast.error('Erro de sistema, tente novamente!')
+    }
   }
 
   return (
     <>
-      <Home />
-      <form onSubmit={handleSubmit}>
+      <HomeLogin />
+      <form onSubmit={handleSubmit(handleLogin)}>
         <section className="w-80 mx-auto md:w-auto flex justify-center xl:w-auto">
           <div className="text-gray-800">
             <div className="flex xl:justify-center lg:flex-col justify-center items-center flex-wrap">
@@ -42,9 +70,9 @@ const LoginPage = () => {
                       id="exampleFormControlInput3"
                       name="email"
                       placeholder="Email"
-                      value={email}
-                      onChange={({ target }) => setEmail(target.value)}
+                      {...register('email', { required: true })}
                     />
+                      <p className='text-red-700 mx-1 mt-1'>{errors.email?.message}</p>
                   </div>
                   <div className="flex items-center">
                     <input
@@ -53,10 +81,10 @@ const LoginPage = () => {
                       id="exampleFormControlInput4"
                       name="password"
                       placeholder="Senha"
-                      value={password}
-                      onChange={({ target }) => setPassword(target.value)}
+                      {...register('password', { required: true })}
                     />
                   </div>
+                    <p className='text-red-700 mx-1 mt-1'>{errors.password?.message}</p>
                   <div className="flex justify-center items-center gap-8 my-4 ">
                     <div className="flex items-center justify-center">
                       <input
@@ -94,7 +122,7 @@ const LoginPage = () => {
                         Não tem uma conta?
                       </p>
                       <Link
-                        to="/registrar"
+                        to={'/registrar'}
                         className="mx-2 pt-3 text-red-600 font-medium hover:text-red-700
                       focus:text-red-700 transition duration-500 ease-in-out transform hover:-translate-x hover:scale-105"
                       >

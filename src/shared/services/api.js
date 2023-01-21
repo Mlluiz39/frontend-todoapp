@@ -1,7 +1,15 @@
 import axios from 'axios'
 
 const api = axios.create({
-  baseURL: 'https://mlluiztodo.fly.dev/'
+  baseURL: 'https://mlluiz-todo-app.fly.dev'
 })
 
-export default api
+api.interceptors.request.use(async config => {
+  const user = localStorage.getItem('user')
+  const token = user && JSON.parse(user).token
+  config.headers.Authorization = `Bearer ${token}`
+
+  return config
+})
+
+export { api }

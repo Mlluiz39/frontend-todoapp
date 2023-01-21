@@ -1,6 +1,8 @@
 import React from 'react'
 import { FaCalendarAlt } from 'react-icons/fa'
 
+import TaskImage from '../assets/list_task.png'
+
 const Home = () => {
   return (
     <div className="w-full mx-auto">
@@ -28,6 +30,19 @@ const Home = () => {
               </a>
             </div>
           </nav>
+        </div>
+      </section>
+      <section>
+        <div className="flex justify-center items-center">
+          <div className="w-1/2">
+            <h1 className="text-2xl text-center text-sky-700 mt-4">Bem vindo ao TodoApp</h1>
+            <p className="text-center text-sky-600 mt-3">
+              Aqui voce pode cadastrar suas tarefas e acompanhar o andamento delas. <br />
+              Com o TodoApp voce pode ter uma visão geral de suas tarefas e
+              também pode filtrar por data de cadastro, data de conclusão e status.
+              </p>
+              <img className='w-96 mx-auto my-3' src={TaskImage} alt="imagem lista de tarefas" />
+          </div>
         </div>
       </section>
     </div>

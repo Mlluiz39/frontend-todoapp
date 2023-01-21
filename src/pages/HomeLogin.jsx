@@ -1,18 +1,8 @@
 import React from 'react'
 import { FaCalendarAlt } from 'react-icons/fa'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
-import useUser from '@/hooks/useUser'
-
-const HomeTask = () => {
-  const navigate = useNavigate()
-  const { logout } = useUser()
-  const removeUser = async () => {
-    await logout()
-
-    navigate('/login')
-  }
-
+const HomeLogin = () => {
   return (
     <div className="w-full mx-auto">
       <section className="flex justify-between items-center m-2 bg-slate-700 rounded-lg p-3">
@@ -25,24 +15,17 @@ const HomeTask = () => {
           <nav className="p-3">
             <div className="flex items-center justify-center">
               <Link
-                to="/cadastrar"
+                to={'/login'}
                 className="text-white mx-3 opacity-100 hover:opacity-50"
               >
-                Cadastrar
+                Login
               </Link>
 
               <Link
-                to="/listar"
+                to={'/sobre'}
                 className="text-white mx-3 opacity-100 hover:opacity-50"
               >
-                Listar
-              </Link>
-              <Link
-                to="/"
-                className="text-white mx-3 opacity-100 hover:opacity-50 bg-red-600 px-3 rounded-lg"
-                onClick={removeUser}
-              >
-               Sair
+                Sobre
               </Link>
             </div>
           </nav>
@@ -52,4 +35,4 @@ const HomeTask = () => {
   )
 }
 
-export default HomeTask
+export default HomeLogin

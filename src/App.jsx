@@ -1,10 +1,11 @@
-import MyRoutes from './routes/routes'
+/* eslint-disable react/react-in-jsx-scope */
+import MyRoutes from '@/routes/routes'
 
-function App() {
+function App () {
   return (
-    <div>
+    <>
       <MyRoutes />
-    </div>
+    </>
   )
 }
 

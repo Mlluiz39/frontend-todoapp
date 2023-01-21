@@ -1,14 +1,18 @@
 /* eslint-disable react/react-in-jsx-scope */
+
 import { useForm } from 'react-hook-form'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify'
 
-import Home from '@/pages/Home'
-import api from '@/shared/services/api'
+import { api } from '@/shared/services/api'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 
+import HomeLogin from './HomeLogin'
+
 const RegisterUser = () => {
+  const navigate = useNavigate()
+
   const schema = yup.object().shape({
     name: yup.string().required('O nome é obrigatório!'),
     email: yup.string().email('Digite um email valido!').required('O email é obrigatório!'),
@@ -19,25 +23,33 @@ const RegisterUser = () => {
     { resolver: yupResolver(schema) }
   )
 
-  const onSubmit = async clientData => {
-
-      toast.promise(
-        await api.post('/register', clientData),
-        {
-          pending
-            : 'Cadastrando...',
-          success
-            : 'Cadastrado com sucesso!',
-          error
-            : 'Erro verifique se o email já está cadastrado!'
-        },
+  const registerSubmit = async clientData => {
+    try {
+      const { status } = await api.post('/users', {
+        name: clientData.name,
+        email: clientData.email,
+        password: clientData.password
+      }, { validateStatus: () => true }
       )
+      if (status === 200 || status === 201) {
+        toast.success('Cadastro realizado com sucesso!')
+
+        setTimeout(() => {
+          navigate('/login')
+        }, 3000)
+      } else if (status === 409) {
+        toast.error('Email já cadastrado! Faça o login')
+      } else {
+        throw new Error()
+      }
+    } catch (error) {
+      toast.error('Erro de sistema, tente novamente!')
     }
-  
+  }
 
   return (
     <>
-      <Home />
+      <HomeLogin />
       <div>
         <div className="relative mt-32 flex flex-col sm:justify-center items-center">
           <div className="relative sm:max-w-sm w-full">
@@ -50,7 +62,7 @@ const RegisterUser = () => {
               >
                 Cadastrar
               </label>
-              <form className="mt-10" noValidate onSubmit={handleSubmit(onSubmit)}>
+              <form className="mt-10" noValidate onSubmit={handleSubmit(registerSubmit)}>
                 <div>
                   <input
                     type="text"
@@ -109,7 +121,7 @@ const RegisterUser = () => {
           </div>
         </div>
       </div>
-      <ToastContainer />
+      <ToastContainer theme='colored'/>
     </>
   )
 }
