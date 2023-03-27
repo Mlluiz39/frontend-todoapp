@@ -1,0 +1,29 @@
+Todo List
+Este é um aplicativo simples de lista de tarefas com autenticação de usuários e armazenamento de dados em um banco de dados PostgreSQL. Com ele, você pode adicionar, visualizar e remover itens de uma lista de tarefas, além de fazer login e logout.
+
+Instalação
+Para instalar o aplicativo, siga os seguintes passos:
+
+Clone este repositório para sua máquina local.
+Navegue até o diretório onde o repositório foi clonado.
+Instale as dependências do aplicativo executando o comando npm install.
+Configure as variáveis de ambiente para a conexão com o banco de dados PostgreSQL, definindo as seguintes variáveis: DB_HOST, DB_PORT, DB_USER, DB_PASSWORD e DB_DATABASE.
+Inicie o aplicativo executando o comando npm start.
+Uso
+Para usar o aplicativo, siga os seguintes passos:
+
+Abra o aplicativo em seu navegador (por padrão, o aplicativo estará disponível em http://localhost:3000).
+Crie uma conta de usuário clicando no link "Criar conta" na página inicial.
+Faça login na sua conta usando o formulário de login na página inicial.
+Para adicionar um novo item à lista de tarefas, digite o nome da tarefa no campo de entrada e pressione o botão "Adicionar".
+Para remover um item da lista de tarefas, clique no botão "Remover" ao lado do item.
+Para marcar um item como concluído, clique no checkbox ao lado do item.
+Para fazer logout, clique no link "Logout" no canto superior direito da página.
+Contribuição
+Se você quiser contribuir para o desenvolvimento deste aplicativo, siga os seguintes passos:
+
+Crie um fork deste repositório.
+Faça suas alterações no fork.
+Abra um pull request com suas alterações para este repositório.
+Licença
+Este aplicativo é licenciado sob a MIT License.
