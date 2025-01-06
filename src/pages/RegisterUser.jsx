@@ -25,7 +25,7 @@ const RegisterUser = () => {
 
   const registerSubmit = async clientData => {
     try {
-      const { status } = await api.post('/users', {
+      const { status } = await api.post('/register', {
         name: clientData.name,
         email: clientData.email,
         password: clientData.password

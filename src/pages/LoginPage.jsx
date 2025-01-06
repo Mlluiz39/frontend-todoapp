@@ -24,7 +24,7 @@ const LoginPage = () => {
 
   const handleLogin = async clientData => {
     try {
-      const { status, data } = await api.post('/sessions', {
+      const { status, data } = await api.post('/login', {
         email: clientData.email,
         password: clientData.password
       }, { validateStatus: () => true }
