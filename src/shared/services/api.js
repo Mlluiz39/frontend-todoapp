@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const api = axios.create({
-  baseURL: 'https://mlluiz-todo-app.fly.dev'
+  baseURL: 'https://backendtodoapp-3.onrender.com/'
 })
 
 api.interceptors.request.use(async config => {
